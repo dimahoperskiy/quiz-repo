@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    ports:
+      - '3003:3003'
+    depends_on:
+      - mongo
+    environment:
+      - PORT=3003
+      - JWT_SECRET=super-secret-key
+      - MONGO_URI=mongodb://mongo:27017/auth
+
+  quiz-service:
+    build: ./quiz-service
+    container_name: quiz-service
+    ports:
+      - '3002:3002'
+    depends_on:
+      - mongo
+      - geo-service
+    environment:
+      - PORT=3002
+      - JWT_SECRET=super-secret-key
+      - MONGO_URI=mongodb://mongo:27017/quiz
+      - GEO_SERVICE_URL=http://geo-service:3001/api
+
+  geo-service:
+    build: ./geo-service
+    container_name: geo-service
+    ports:
+      - '3001:3001'
+
+  world-quiz:
+    build: ./world-quiz
+    container_name: world-quiz
+    ports:
+      - '3000:80'
+    depends_on:
+      - auth-service
+      - quiz-service
+      - geo-service
+
+volumes:
+  mongo-data:
