@@ -18,6 +18,8 @@ lint_auth:
 test_auth:
   stage: test
   image: node:20-alpine
+  services:
+    - mongo:5
   script:
     - cd auth-service
     - npm install
