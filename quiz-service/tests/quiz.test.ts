@@ -1,14 +1,15 @@
 import request from "supertest";
 import mongoose from "mongoose";
-import nock from "nock";
 import app from "../src/app";
-import { config } from "../src/config";
+import axios from "axios";
+
+// ✅ Мокаем весь axios
+jest.mock("axios");
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("Quiz API", () => {
   beforeAll(async () => {
-    // Устанавливаем правильный GEO_SERVICE_URL для тестов
-    process.env.GEO_SERVICE_URL = "http://geo-service:3001/api";
-
+    // await mongoose.connect("mongodb://localhost:27017/quiz-test");
     await mongoose.connect("mongodb://mongo:27017/quiz-test");
   }, 20000);
 
@@ -18,15 +19,15 @@ describe("Quiz API", () => {
   });
 
   it("должен отдавать страны для квиза", async () => {
-    // Мокаем ответ от geo-service
-    nock(config.geoServiceUrl.replace("/api", ""))
-      .get("/countries")
-      .reply(200, {
+    // ❗ Здесь мокаем ответ axios.get
+    mockedAxios.get.mockResolvedValueOnce({
+      data: {
         features: [
           { properties: { name_ru: "Россия", adm0_a3: "RUS" } },
           { properties: { name_ru: "Франция", adm0_a3: "FRA" } },
         ],
-      });
+      },
+    });
 
     const res = await request(app).post("/api/quiz/start").send({ count: 2 });
 
