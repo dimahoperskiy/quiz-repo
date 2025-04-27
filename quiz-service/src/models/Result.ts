@@ -1,23 +1,23 @@
-import mongoose, { InferSchemaType, Model } from 'mongoose';
+import mongoose, { InferSchemaType, Model } from "mongoose";
 
 const AnswerSchema = new mongoose.Schema({
-    question: String,
-    userAnswer: String,
-    correct: Boolean,
+  question: String,
+  userAnswer: String,
+  correct: Boolean,
 });
 
 const ResultSchema = new mongoose.Schema(
-    {
-        userId: { type: String, required: true },
-        total: Number,
-        correct: Number,
-        answers: [AnswerSchema],
-    },
-    { timestamps: true }
+  {
+    userId: { type: String, required: true },
+    total: Number,
+    correct: Number,
+    answers: [AnswerSchema],
+  },
+  { timestamps: true },
 );
 
 // 👉 Тип документа
 export type ResultType = InferSchemaType<typeof ResultSchema>;
 
 // 👉 Экспорт модели с типом
-export const Result: Model<ResultType> = mongoose.model('Result', ResultSchema);
+export const Result: Model<ResultType> = mongoose.model("Result", ResultSchema);

@@ -1,0 +1,128 @@
+stages:
+  - lint
+  - test
+  - build
+
+# --- AUTH-SERVICE ---
+lint_auth:
+  stage: lint
+  image: node:20-alpine
+  script:
+    - cd auth-service
+    - npm install
+    - npm run lint
+  artifacts:
+    when: always
+    expire_in: 1 hour
+
+test_auth:
+  stage: test
+  image: node:20-alpine
+  script:
+    - cd auth-service
+    - npm install
+    - npm run test
+  artifacts:
+    when: always
+    expire_in: 1 hour
+
+build_auth:
+  stage: build
+  image: node:20-alpine
+  script:
+    - cd auth-service
+    - npm install
+    - npm run build
+
+# --- QUIZ-SERVICE ---
+lint_quiz:
+  stage: lint
+  image: node:20-alpine
+  script:
+    - cd quiz-service
+    - npm install
+    - npm run lint
+  artifacts:
+    when: always
+    expire_in: 1 hour
+
+test_quiz:
+  stage: test
+  image: node:20-alpine
+  script:
+    - cd quiz-service
+    - npm install
+    - npm run test
+  artifacts:
+    when: always
+    expire_in: 1 hour
+
+build_quiz:
+  stage: build
+  image: node:20-alpine
+  script:
+    - cd quiz-service
+    - npm install
+    - npm run build
+
+# --- GEO-SERVICE ---
+lint_geo:
+  stage: lint
+  image: node:20-alpine
+  script:
+    - cd geo-service
+    - npm install
+    - npm run lint
+  artifacts:
+    when: always
+    expire_in: 1 hour
+
+test_geo:
+  stage: test
+  image: node:20-alpine
+  script:
+    - cd geo-service
+    - npm install
+    - npm run test
+  artifacts:
+    when: always
+    expire_in: 1 hour
+
+build_geo:
+  stage: build
+  image: node:20-alpine
+  script:
+    - cd geo-service
+    - npm install
+    - npm run build
+
+# --- WORLD-QUIZ (FRONTEND) ---
+lint_front:
+  stage: lint
+  image: node:20-alpine
+  script:
+    - cd world-quiz
+    - npm install
+    - npm run lint
+  artifacts:
+    when: always
+    expire_in: 1 hour
+
+test_front:
+  stage: test
+  image: node:20-alpine
+  script:
+    - cd world-quiz
+    - npm install
+    - npm run test
+  artifacts:
+    when: always
+    expire_in: 1 hour
+
+build_front:
+  stage: build
+  image: node:20-alpine
+  script:
+    - cd world-quiz
+    - npm install
+    - npm run build

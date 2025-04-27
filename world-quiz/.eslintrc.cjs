@@ -26,7 +26,6 @@ module.exports = {
   plugins: ['react-refresh', 'prettier', '@typescript-eslint', 'tailwindcss'],
   rules: {
     'prettier/prettier': 'error',
-    // 'react/prop-types': 'off',
     'react/jsx-no-target-blank': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',

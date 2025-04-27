@@ -30,6 +30,9 @@ export const submitQuizResults = async (
       correct: feature.get('guessed'),
     }));
 
+  // уборка
+  features.forEach((feature) => feature.set('guessed', undefined));
+
   const correct = results.filter((r) => r.correct).length;
 
   const res = await fetch(`${config.quizServiceUrl}/submit`, {

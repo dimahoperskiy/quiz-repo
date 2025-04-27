@@ -22,7 +22,8 @@
       "@utils/*": ["./src/utils/*"],
       "@assets/*": ["./src/assets/*"],
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["vitest/globals"]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

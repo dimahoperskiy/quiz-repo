@@ -15,4 +15,9 @@ export default defineConfig({
       '@api': resolve(process.cwd(), './src/api'),
     },
   },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/tests/setup.ts',
+  },
 });
