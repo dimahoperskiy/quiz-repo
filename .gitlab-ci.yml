@@ -51,6 +51,8 @@ lint_quiz:
 test_quiz:
   stage: test
   image: node:20-alpine
+  services:
+    - mongo:5
   script:
     - cd quiz-service
     - npm install
