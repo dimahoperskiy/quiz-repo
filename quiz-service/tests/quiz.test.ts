@@ -1,12 +1,13 @@
 import request from "supertest";
-import app from "../src/app";
 import mongoose from "mongoose";
+import app from "../src/app";
+import nock from "nock";
 
 describe("Quiz API", () => {
   beforeAll(async () => {
-    // await mongoose.connect('mongodb://localhost:27017/quiz-test');
+    // await mongoose.connect("mongodb://localhost:27017/quiz-test");
     await mongoose.connect("mongodb://mongo:27017/quiz-test");
-  });
+  }, 20000);
 
   afterAll(async () => {
     await mongoose.connection.dropDatabase();
@@ -14,9 +15,19 @@ describe("Quiz API", () => {
   });
 
   it("должен отдавать страны для квиза", async () => {
-    const res = await request(app).post("/api/quiz/start").send({ count: 5 });
+    nock("http://geo-service:3001")
+      .get("/api/countries")
+      .reply(200, {
+        features: [
+          { properties: { name_ru: "Россия", adm0_a3: "RUS" } },
+          { properties: { name_ru: "Франция", adm0_a3: "FRA" } },
+        ],
+      });
+
+    const res = await request(app).post("/api/quiz/start").send({ count: 2 });
 
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBe(2);
   });
 });
