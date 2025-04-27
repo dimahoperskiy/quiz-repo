@@ -1,22 +1,12 @@
-import express from 'express';
-import cors from 'cors';
-import { config } from './config';
-import authRoutes from './routes/auth';
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+import { config } from "./config";
+import app from "./app";
 
 mongoose
-    .connect(config.mongoUri)
-    .then(() => console.log('✅ Connected to MongoDB (auth-service)'))
-    .catch((err) => console.error('❌ MongoDB connection error:', err));
-
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-app.use('/api/auth', authRoutes);
+  .connect(config.mongoUri)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 app.listen(config.port, () => {
-    console.log(`🔐 Auth Service running on http://localhost:${config.port}`);
+  console.log(`🚀 Auth Service running on port ${config.port}`);
 });
