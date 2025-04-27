@@ -1,11 +1,14 @@
 import request from "supertest";
 import mongoose from "mongoose";
-import app from "../src/app";
 import nock from "nock";
+import app from "../src/app";
+import { config } from "../src/config";
 
 describe("Quiz API", () => {
   beforeAll(async () => {
-    // await mongoose.connect("mongodb://localhost:27017/quiz-test");
+    // Устанавливаем правильный GEO_SERVICE_URL для тестов
+    process.env.GEO_SERVICE_URL = "http://geo-service:3001/api";
+
     await mongoose.connect("mongodb://mongo:27017/quiz-test");
   }, 20000);
 
@@ -15,8 +18,9 @@ describe("Quiz API", () => {
   });
 
   it("должен отдавать страны для квиза", async () => {
-    nock("http://geo-service:3001")
-      .get("/api/countries")
+    // Мокаем ответ от geo-service
+    nock(config.geoServiceUrl.replace("/api", ""))
+      .get("/countries")
       .reply(200, {
         features: [
           { properties: { name_ru: "Россия", adm0_a3: "RUS" } },
