@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: world-quiz
+  namespace: quiz-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: world-quiz
+  template:
+    metadata:
+      labels:
+        app: world-quiz
+    spec:
+      containers:
+        - name: world-quiz
+          image: world-quiz:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80

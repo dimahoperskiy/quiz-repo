@@ -5,7 +5,9 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install
+# Устанавливаем dev-зависимости для tsc
+RUN npm install --include=dev
+
 RUN npm run build
 
 # Продакшн-этап

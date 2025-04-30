@@ -50,6 +50,10 @@ services:
       - auth-service
       - quiz-service
       - geo-service
+    environment:
+      - VITE_GEO_SERVICE_URL=http://localhost:3001/api
+      - VITE_QUIZ_SERVICE_URL=http://localhost:3002/api/quiz
+      - VITE_AUTH_SERVICE_URL=http://localhost:3003/api/auth
 
 volumes:
   mongo-data:

@@ -68,7 +68,9 @@ const LoginForm = () => {
           />
 
           <button
-            onClick={void handleSubmit}
+            onClick={() => {
+              void handleSubmit();
+            }}
             className='w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-700'
           >
             {mode === 'login' ? 'Войти' : 'Зарегистрироваться'}

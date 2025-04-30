@@ -1,5 +1,5 @@
 export const config = {
-  geoServiceUrl: 'http://localhost:3001/api',
-  quizServiceUrl: 'http://localhost:3002/api/quiz',
-  authServiceUrl: 'http://localhost:3003/api/auth',
+  geoServiceUrl: import.meta.env.VITE_GEO_SERVICE_URL,
+  quizServiceUrl: import.meta.env.VITE_QUIZ_SERVICE_URL,
+  authServiceUrl: import.meta.env.VITE_AUTH_SERVICE_URL,
 };
