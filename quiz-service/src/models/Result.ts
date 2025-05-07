@@ -16,8 +16,6 @@ const ResultSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// 👉 Тип документа
 export type ResultType = InferSchemaType<typeof ResultSchema>;
 
-// 👉 Экспорт модели с типом
 export const Result: Model<ResultType> = mongoose.model("Result", ResultSchema);

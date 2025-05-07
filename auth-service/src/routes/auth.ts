@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt, { SignOptions } from "jsonwebtoken";
 import { config } from "../config";
 import { User } from "../models/User";
+import { errorCounter, loginCounter, registerCounter } from "../metrics";
 
 const router = Router();
 
@@ -24,15 +25,18 @@ router.post("/register", async (req, res) => {
     const existing = await User.findOne({ email });
     if (existing) {
       res.status(409).json({ error: "Этот пользователь уже существует" });
+      errorCounter.inc();
       return;
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
     await User.create({ email, passwordHash });
+    registerCounter.inc();
 
     res.json({ message: "Пользователь зарегестрирован" });
   } catch (e) {
     console.error("Ошибка при регистрации:", e);
+    errorCounter.inc();
     res.status(500).json({ error: "Ошибка сервера" });
   }
 });
@@ -65,10 +69,12 @@ router.post("/login", async (req, res) => {
       config.jwtSecret,
       signOptions,
     );
+    loginCounter.inc();
 
     res.json({ token });
   } catch (e) {
     console.error("Ошибка при входе:", e);
+    errorCounter.inc();
     res.status(500).json({ error: "Ошибка сервера" });
   }
 });
