@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "type": "module",
   "main": "main.tsx",
-  "homepage": "http://dimahoperskiy.github.io/world-quiz",
+  "homepage": "https://dimahoperskiy.github.io/quiz-repo",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

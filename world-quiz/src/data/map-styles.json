@@ -14,11 +14,11 @@
     "openmaptiles": {
       "type": "vector",
       "scheme": "xyz",
-      "url": "https://tiles.stadiamaps.com/data/openmaptiles.json"
+      "url": "https://tiles.openfreemap.org/planet"
     }
   },
-  "sprite": "https://tiles.stadiamaps.com/styles/outdoors/sprite",
-  "glyphs": "https://tiles.stadiamaps.com/fonts/{fontstack}/{range}.pbf",
+  "sprite": "https://tiles.openfreemap.org/sprites/ofm_f384/ofm",
+  "glyphs": "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
@@ -373,7 +373,7 @@
       "filter": ["all", ["==", "$type", "Point"], [">=", "rank", 25]],
       "layout": {
         "text-padding": 2,
-        "text-font": ["Stadia Semibold"],
+        "text-font": ["Noto Sans Bold"],
         "text-anchor": "top",
         "icon-image": "{class}_11",
         "text-field": [
@@ -417,7 +417,7 @@
       ],
       "layout": {
         "text-padding": 2,
-        "text-font": ["Stadia Semibold"],
+        "text-font": ["Noto Sans Bold"],
         "text-anchor": "top",
         "icon-image": "{class}_11",
         "text-field": [
@@ -463,7 +463,7 @@
       ],
       "layout": {
         "text-padding": 2,
-        "text-font": ["Stadia Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-anchor": "top",
         "icon-image": "{class}_11",
         "text-field": [
@@ -500,28 +500,6 @@
       }
     },
     {
-      "id": "ski-slopes-label",
-      "type": "symbol",
-      "source": "openmaptiles",
-      "source-layer": "piste",
-      "minzoom": 13,
-      "layout": {
-        "text-field": "{name}",
-        "text-font": ["Stadia Regular"],
-        "text-size": 12,
-        "symbol-placement": "line-center",
-        "icon-pitch-alignment": "auto",
-        "text-anchor": "bottom",
-        "text-keep-upright": true
-      },
-      "paint": {
-        "text-color": "rgba(75, 122, 195, 1)",
-        "text-halo-color": "rgba(255, 255, 255, 1)",
-        "text-halo-blur": 0.5,
-        "text-halo-width": 1
-      }
-    },
-    {
       "id": "highway-name-minor",
       "type": "symbol",
       "source": "openmaptiles",
@@ -534,7 +512,7 @@
       ],
       "layout": {
         "text-size": {"base": 1, "stops": [[13, 12], [14, 13]]},
-        "text-font": ["Stadia Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-field": [
           "concat",
           ["get", "name:latin"],
@@ -575,7 +553,7 @@
         "text-size": 10,
         "icon-image": "{network}_{ref_length}",
         "icon-rotation-alignment": "viewport",
-        "text-font": ["Stadia Semibold"],
+        "text-font": ["Noto Sans Bold"],
         "symbol-placement": {
           "base": 1,
           "stops": [[7, "point"], [7, "line"], [8, "line"]]
@@ -603,7 +581,7 @@
         "text-size": 10,
         "icon-image": "{network}_{ref_length}",
         "icon-rotation-alignment": "viewport",
-        "text-font": ["Stadia Semibold"],
+        "text-font": ["Noto Sans Bold"],
         "symbol-placement": {"base": 1, "stops": [[10, "point"], [11, "line"]]},
         "text-rotation-alignment": "viewport",
         "icon-size": 1,

@@ -4,7 +4,7 @@ import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/world-quiz/',
+  base: '/quiz-repo/',
   plugins: [react()],
   resolve: {
     alias: {
