@@ -1,34 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { getStats, QuizStat } from '@/api/quiz';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
 
 const Stats = () => {
-  const [stats, setStats] = useState<QuizStat[] | null>(null);
+  const [stats] = useState<QuizStat[]>(() => getStats());
 
-  useEffect(() => {
-    void (async () => {
-      const data = await getStats();
-      setStats(data);
-    })();
-  }, []);
-
-  if (!stats)
-    return (
-      <div>
-        <Link className='absolute left-0 top-0' to='/'>
-          <ArrowBackIcon />
-        </Link>
-        <p>Загрузка статистики...</p>
-      </div>
-    );
   if (stats.length === 0)
     return (
       <div>
         <Link className='absolute left-0 top-0' to='/'>
           <ArrowBackIcon />
         </Link>
-        <p>Нет сохранённых попыток.</p>
+        <p>
+          Пока нет сохранённых попыток — они появятся после прохождения квиза в
+          этом браузере.
+        </p>
       </div>
     );
 
@@ -41,7 +28,7 @@ const Stats = () => {
       <div className='mt-8 flex flex-col gap-4'>
         {stats.map((stat) => (
           <div
-            key={stat._id}
+            key={stat.id}
             className='relative rounded-lg border border-white/10 bg-white/5 p-4 text-white shadow-md'
           >
             <span className='absolute right-3 top-3 rounded bg-blue-600 px-3 py-1 text-xs font-semibold text-white'>

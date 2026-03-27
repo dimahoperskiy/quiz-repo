@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 
 type QuizSettingsModalProps = {
-  handleClick: () => Promise<void>;
+  handleClick: () => void;
   isExplore?: boolean;
   countriesCount: number;
   setCountriesCount: Dispatch<SetStateAction<number>>;

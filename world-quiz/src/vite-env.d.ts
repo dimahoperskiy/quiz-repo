@@ -1,9 +1,7 @@
-interface ImportMetaEnv {
-  readonly VITE_GEO_SERVICE_URL: string;
-  readonly VITE_QUIZ_SERVICE_URL: string;
-  readonly VITE_AUTH_SERVICE_URL: string;
-}
+/// <reference types="vite/client" />
 
-interface ImportMeta {
-  readonly env: ImportMetaEnv;
+declare module '@countries-geo' {
+  import type { FeatureCollection } from 'geojson';
+  const value: FeatureCollection;
+  export default value;
 }

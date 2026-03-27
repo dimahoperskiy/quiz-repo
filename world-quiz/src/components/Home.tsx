@@ -1,13 +1,8 @@
 import { Link, Outlet } from 'react-router-dom';
 import worldImg from '@assets/world4.jpg';
-import PersonIcon from '@mui/icons-material/Person';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { useAuth } from '@/context/AuthContext';
-import { logout } from '@/api/auth';
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 const Home = () => {
-  const { user } = useAuth();
-
   return (
     <div className='flex min-h-screen flex-col'>
       <header className='bg-black px-4 py-6 text-white md:px-6'>
@@ -33,11 +28,10 @@ const Home = () => {
             </Link>
           </div>
           <div className='mx-10 flex gap-4'>
-            <Link className='flex gap-2' to={user ? '/stats' : '/login'}>
-              <span>{user ? user.email : 'Войти'}</span>
-              <PersonIcon />
+            <Link className='flex gap-2' to='/stats'>
+              <span>Статистика</span>
+              <BarChartIcon />
             </Link>
-            {user && <LogoutIcon className='cursor-pointer' onClick={logout} />}
           </div>
         </div>
       </header>

@@ -13,6 +13,15 @@ export default defineConfig({
       '@utils': resolve(process.cwd(), './src/utils'),
       '@components': resolve(process.cwd(), './src/components'),
       '@api': resolve(process.cwd(), './src/api'),
+      '@countries-geo': resolve(
+        process.cwd(),
+        '../geo-service/geojson/geojson.json',
+      ),
+    },
+  },
+  server: {
+    fs: {
+      allow: ['..'],
     },
   },
   test: {

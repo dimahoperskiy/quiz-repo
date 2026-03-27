@@ -1,8 +1,8 @@
 import '../App.css';
-import { config } from '@/config';
+import countriesGeoJson from '@countries-geo';
 import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import 'ol/ol.css';
-import { Map, View, Feature, MapBrowserEvent } from 'ol';
+import { Map, View, MapBrowserEvent } from 'ol';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
@@ -16,7 +16,6 @@ import {
   defaultStroke,
   defaultTextFill,
 } from '@/utils/mapStyles';
-import type { FeatureCollection } from 'geojson';
 import { fromLonLat } from 'ol/proj';
 import { Zoom } from 'ol/control';
 import { getCenter } from 'ol/extent';
@@ -32,31 +31,21 @@ import WrongAlert from './snackbars/WrongAlert.tsx';
 import QuizMenu from '@components/QuizMenu';
 import QuizSettingsModal from '@components/QuizSettingsModal';
 import QuizResultsModal from '@components/QuizResultsModal';
-import { submitQuizResults } from '@/api/quiz';
+import { saveQuizResults } from '@/api/quiz';
+import { ExtendedFeature } from '@/types/ol-feature';
 
-export interface ExtendedFeature extends Feature {
-  get<K extends keyof ExtendedFeatureKeyMap>(key: K): ExtendedFeatureKeyMap[K];
-}
+export type { ExtendedFeature } from '@/types/ol-feature';
 
-interface ExtendedFeatureKeyMap {
-  name: string;
-  name_ru: string;
-  used: boolean | undefined;
-  country_index: number;
-  adm0_a3: string;
-  guessed?: boolean;
-}
-
-const fetchQuizCountries = async (count: number) => {
-  const response = await fetch(`${config.quizServiceUrl}/start`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ count }),
-  });
-
-  return (await response.json()) as { name: string; code: string }[];
+const pickQuizCountries = (
+  allFeatures: ExtendedFeature[],
+  count: number,
+): { name: string; code: string }[] => {
+  const pool = allFeatures.filter((f) => f.get('adm0_a3') && f.get('name_ru'));
+  const shuffled = [...pool].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count).map((f) => ({
+    name: String(f.get('name_ru')),
+    code: String(f.get('adm0_a3')),
+  }));
 };
 
 function InteractiveMap({ isExplore }: { isExplore?: boolean }) {
@@ -96,7 +85,7 @@ function InteractiveMap({ isExplore }: { isExplore?: boolean }) {
         zoom: 2,
       }),
     });
-    const fetchCountries = async () => {
+    const initMap = () => {
       try {
         const defaultControls = initialMap.getControls();
 
@@ -110,10 +99,7 @@ function InteractiveMap({ isExplore }: { isExplore?: boolean }) {
 
         const vectorSource = new VectorSource();
 
-        const response = await fetch(`${config.geoServiceUrl}/countries`);
-        const geojsonData = (await response.json()) as FeatureCollection;
-
-        const features = new GeoJSON().readFeatures(geojsonData, {
+        const features = new GeoJSON().readFeatures(countriesGeoJson, {
           featureProjection: 'EPSG:3857',
           dataProjection: 'EPSG:4326',
         });
@@ -203,7 +189,7 @@ function InteractiveMap({ isExplore }: { isExplore?: boolean }) {
       }
     };
 
-    void fetchCountries();
+    initMap();
 
     return () => initialMap.setTarget(undefined);
   }, [isExplore]);
@@ -237,12 +223,12 @@ function InteractiveMap({ isExplore }: { isExplore?: boolean }) {
     [features],
   );
 
-  const askRandomCountry = useCallback(async () => {
+  const askRandomCountry = useCallback(() => {
     let currentQuizCountries = quizCountries;
 
     // если список стран пуст — запрашиваем новые
     if (currentQuizCountries.length === 0) {
-      const countries = await fetchQuizCountries(countriesCount);
+      const countries = pickQuizCountries(features, countriesCount);
       setQuizCountries(countries);
       currentQuizCountries = countries;
     }
@@ -263,14 +249,14 @@ function InteractiveMap({ isExplore }: { isExplore?: boolean }) {
     setCountryGuessSnackbarOpen(true);
   }, [quizCountries, countriesCount, features]);
 
-  const restartQuiz = useCallback(async () => {
+  const restartQuiz = useCallback(() => {
     setQuizCountry(null);
     setCountriesLeft(countriesCount);
     setCorrectGuesses([]);
     setWrongGuesses([]);
     features.forEach((feature: ExtendedFeature) => feature.set('used', false));
     setShowQuizMenu(true);
-    await askRandomCountry();
+    askRandomCountry();
   }, [askRandomCountry, countriesCount, features]);
 
   useEffect(() => {
@@ -323,7 +309,7 @@ function InteractiveMap({ isExplore }: { isExplore?: boolean }) {
         if (countriesLeft === 1) {
           setCountryGuessSnackbarOpen(false);
           setShowQuizMenu(false);
-          void submitQuizResults(features, countriesCount);
+          void saveQuizResults(features, countriesCount);
           setTimeout(() => {
             setQuizResultsModalOpen(true);
           }, 1500);
@@ -340,7 +326,9 @@ function InteractiveMap({ isExplore }: { isExplore?: boolean }) {
   }, [
     askRandomCountry,
     correctGuesses,
+    countriesCount,
     countriesLeft,
+    features,
     isExplore,
     map,
     quizCountry,
@@ -356,8 +344,8 @@ function InteractiveMap({ isExplore }: { isExplore?: boolean }) {
         document.body,
       )}
       <QuizSettingsModal
-        handleClick={async () => {
-          await askRandomCountry();
+        handleClick={() => {
+          askRandomCountry();
         }}
         isExplore={isExplore}
         countriesCount={countriesCount}
@@ -387,9 +375,9 @@ function InteractiveMap({ isExplore }: { isExplore?: boolean }) {
           wrongCount={wrongGuesses.length}
           leftCount={countriesLeft}
           isWatchResultsMode={countriesLeft < 1}
-          handleClick={async () => {
+          handleClick={() => {
             redrawFeatures(false);
-            await restartQuiz();
+            restartQuiz();
           }}
         />
       )}

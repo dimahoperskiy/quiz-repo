@@ -4,9 +4,7 @@ import InteractiveMap from '@components/InteractiveMap';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from '@components/Home';
-import { AuthProvider } from '@/context/AuthContext';
 import Stats from '@components/Stats';
-import LoginForm from '@components/LoginForm.tsx';
 
 const router = createBrowserRouter([
   {
@@ -14,7 +12,7 @@ const router = createBrowserRouter([
     element: <Home />,
     children: [
       {
-        index: true, // 👈 индексный маршрут (default)
+        index: true,
         element: (
           <>
             <h2 className='text-3xl font-bold tracking-tighter sm:text-4xl'>
@@ -28,7 +26,6 @@ const router = createBrowserRouter([
           </>
         ),
       },
-      { path: 'login', element: <LoginForm /> },
       { path: 'stats', element: <Stats /> },
     ],
   },
@@ -44,8 +41,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <RouterProvider router={router} />
   </React.StrictMode>,
 );

@@ -8,7 +8,7 @@ type QuizResultsModalProps = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   progress: number;
-  handleClick: () => Promise<void>;
+  handleClick: () => void;
   setShowQuizMenu: Dispatch<SetStateAction<boolean>>;
   redrawFeatures: () => void;
 };

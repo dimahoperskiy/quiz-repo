@@ -8,7 +8,7 @@ type QuizMenuProps = {
   wrongCount: number;
   leftCount: number;
   isWatchResultsMode: boolean;
-  handleClick: () => Promise<void>;
+  handleClick: () => void;
 };
 
 const QuizMenu = ({
